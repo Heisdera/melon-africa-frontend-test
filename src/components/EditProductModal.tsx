@@ -1,8 +1,9 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Plus } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -12,7 +13,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Form,
@@ -24,79 +24,88 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { generateId } from '@/lib/utils'
-import { ProductFormSchemmaTypes, productSchema } from '@/schemas'
+import { productSchema } from '@/schemas'
+import type { z } from 'zod'
 import { useImageUploadStore } from '@/store/image-upload-store'
-import { useAddProductMutation } from '@/utils/mutations'
-import { useState } from 'react'
+import { useEditProductMutation } from '@/utils/mutations'
 import ImageUploader from './ImageUploader'
+import type { Product } from '@/types'
 
-export function AddProductModal({ children }: { children?: React.ReactNode }) {
+type ProductFormSchemaTypes = z.infer<typeof productSchema>
+
+interface EditProductModalProps {
+  product: Product
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+export function EditProductModal({
+  product,
+  open,
+  onOpenChange,
+}: EditProductModalProps) {
   const { setImage } = useImageUploadStore()
-  const [open, setOpen] = useState(false)
-  const { mutate: addProduct, isPending } = useAddProductMutation()
+  const { mutate: editProduct, isPending } = useEditProductMutation()
 
-  const form = useForm<ProductFormSchemmaTypes>({
+  const form = useForm<ProductFormSchemaTypes>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      image: '',
+      name: product.name,
+      description: product.description,
+      image: product.image,
     },
   })
 
-  const onSubmit = async (data: ProductFormSchemmaTypes) => {
-    // Create a new product with a generated ID
-    const newProduct = {
-      id: generateId(),
+  // Update form values when product changes
+  useEffect(() => {
+    form.reset({
+      name: product.name,
+      description: product.description,
+      image: product.image,
+    })
+  }, [product, form])
+
+  const onSubmit = async (data: ProductFormSchemaTypes) => {
+    // Update the product with new data
+    const updatedProduct = {
+      ...product,
       name: data.name,
       description: data.description,
       image: data.image,
-      variants: [],
     }
 
-    // Add product to local storage via mutation
-    addProduct(newProduct, {
+    // Update product in local storage via mutation
+    editProduct(updatedProduct, {
       onSuccess: () => {
-        setOpen(false)
+        onOpenChange(false)
         form.reset()
       },
     })
   }
 
   const handleClose = (open: boolean) => {
-    setOpen(open)
+    onOpenChange(open)
 
     // Reset form when modal closes
-    form.reset()
+    if (!open) {
+      form.reset()
+    }
   }
+
   const isSubmitting = form.formState.isSubmitting || isPending
 
   return (
     <Dialog
       open={open}
       onOpenChange={(open) => {
-        if (!open) {
-          handleClose(open)
-        } else {
-          setOpen(open)
-        }
+        handleClose(open)
       }}
     >
-      <DialogTrigger asChild onClick={() => setOpen(true)}>
-        {children ? (
-          children
-        ) : (
-          <Button>
-            <Plus className="h-4 w-4" /> Add Product
-          </Button>
-        )}
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Add Product</DialogTitle>
+          <DialogTitle>Edit Product</DialogTitle>
           <DialogDescription>
-            Add a new product to your inventory.
+            Update your product information.
           </DialogDescription>
         </DialogHeader>
 
@@ -164,7 +173,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setOpen(false)}
+                onClick={() => onOpenChange(false)}
                 disabled={isSubmitting}
               >
                 Cancel
@@ -174,7 +183,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Add
+                Update
               </Button>
             </DialogFooter>
           </form>

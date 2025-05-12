@@ -31,3 +31,21 @@ export const imageSchema = z.object({
 })
 
 export type ProductFormSchemmaTypes = z.infer<typeof productSchema>
+
+// Form schema
+export const variantSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  sku: z.string().min(3, { message: 'SKU must be at least 3 characters' }),
+  size: z.string().optional(),
+  color: z.string().optional(),
+  price: z.coerce
+    .number()
+    .positive({ message: 'Price must be a positive number' }),
+  stock: z.coerce
+    .number()
+    .int()
+    .nonnegative({ message: 'Stock must be a non-negative integer' }),
+})
+
+export type VariantFormSchemaType = z.infer<typeof variantSchema>

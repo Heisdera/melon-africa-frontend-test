@@ -54,7 +54,7 @@ export default function ImageUploader({
           id="profile-photo"
           variant="outline"
           className={cn(
-            'group focus-visible:ring-primary relative flex aspect-square size-48 cursor-pointer items-center justify-center overflow-hidden rounded-3xl border-[3px] border-zinc-300 font-normal hover:border-dashed hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-black md:size-56'
+            'group focus-visible:ring-primary relative flex aspect-square size-48 cursor-pointer items-center justify-center overflow-hidden rounded-3xl border-[3px] border-zinc-300 font-normal hover:border-dashed hover:bg-white focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-100 md:size-56'
           )}
           onClick={handleThumbnailClick}
           aria-label={previewUrl ? 'Change image' : 'Upload image'}

@@ -1,3 +1,5 @@
+import { ProductDashboard } from '@/components/ProductDashboard'
+
 export default function Home() {
-  return <div>Your Products</div>
+  return <ProductDashboard />
 }

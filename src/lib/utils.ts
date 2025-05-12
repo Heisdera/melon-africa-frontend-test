@@ -1,3 +1,5 @@
+import { PRODUCTS_KEY } from '@/constants'
+import type { Product, Variant } from '@/types'
 import { clsx, type ClassValue } from 'clsx'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -64,3 +66,146 @@ export const convertBase64StringToFile = (
 
   return file
 }
+
+// Helper to get products from localStorage
+export const getProducts = async (): Promise<Product[]> => {
+  if (typeof window === 'undefined') return []
+
+  const storedProducts = localStorage.getItem(PRODUCTS_KEY)
+  return storedProducts ? JSON.parse(storedProducts) : []
+}
+
+// Helper to save products to localStorage
+const saveProducts = async (products: Product[]): Promise<void> => {
+  if (typeof window === 'undefined') return
+
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
+}
+
+// Add a new product
+export const addProduct = async (product: Product): Promise<Product> => {
+  const products = await getProducts()
+  const newProducts = [...products, { ...product, variants: [] }]
+  await saveProducts(newProducts)
+  return product
+}
+
+// Update an existing product
+export const updateProduct = async (product: Product): Promise<Product> => {
+  const products = await getProducts()
+  const existingProduct = products.find((p) => p.id === product.id)
+
+  if (!existingProduct) {
+    throw new Error(`Product with ID ${product.id} not found`)
+  }
+
+  const updatedProducts = products.map((p) =>
+    p.id === product.id ? { ...product, variants: p.variants } : p
+  )
+
+  await saveProducts(updatedProducts)
+  return product
+}
+
+// Delete a product
+export const deleteProduct = async (productId: string): Promise<void> => {
+  const products = await getProducts()
+  const updatedProducts = products.filter((p) => p.id !== productId)
+  await saveProducts(updatedProducts)
+}
+
+// Add a variant to a product
+export const addVariant = async (variant: Variant): Promise<Variant> => {
+  const products = await getProducts()
+  const productIndex = products.findIndex((p) => p.id === variant.productId)
+
+  if (productIndex === -1) {
+    throw new Error(`Product with ID ${variant.productId} not found`)
+  }
+
+  const updatedProducts = [...products]
+  updatedProducts[productIndex] = {
+    ...updatedProducts[productIndex],
+    variants: [...updatedProducts[productIndex].variants, variant],
+  }
+
+  await saveProducts(updatedProducts)
+  return variant
+}
+
+// Update a variant
+export const updateVariant = async (variant: Variant): Promise<Variant> => {
+  const products = await getProducts()
+  const productIndex = products.findIndex((p) => p.id === variant.productId)
+
+  if (productIndex === -1) {
+    throw new Error(`Product with ID ${variant.productId} not found`)
+  }
+
+  const variantIndex = products[productIndex].variants.findIndex(
+    (v) => v.id === variant.id
+  )
+
+  if (variantIndex === -1) {
+    throw new Error(`Variant with ID ${variant.id} not found`)
+  }
+
+  const updatedProducts = [...products]
+  const updatedVariants = [...updatedProducts[productIndex].variants]
+  updatedVariants[variantIndex] = variant
+
+  updatedProducts[productIndex] = {
+    ...updatedProducts[productIndex],
+    variants: updatedVariants,
+  }
+
+  await saveProducts(updatedProducts)
+  return variant
+}
+
+// Delete a variant
+export const deleteVariant = async (variantId: string): Promise<void> => {
+  const products = await getProducts()
+
+  const updatedProducts = [...products]
+
+  for (let i = 0; i < updatedProducts.length; i++) {
+    const variantIndex = updatedProducts[i].variants.findIndex(
+      (v) => v.id === variantId
+    )
+
+    if (variantIndex !== -1) {
+      updatedProducts[i] = {
+        ...updatedProducts[i],
+        variants: updatedProducts[i].variants.filter((v) => v.id !== variantId),
+      }
+      break
+    }
+  }
+
+  await saveProducts(updatedProducts)
+}
+
+// Optional: Fetch products from DummyJSON API
+// export const fetchProductsFromAPI = async (): Promise<Product[]> => {
+//   try {
+//     const response = await fetch('https://dummyjson.com/products?limit=10')
+//     const data = await response.json()
+
+//     // Transform the data to match our Product interface
+//     const products: Product[] = data.products.map((item: any) => ({
+//       id: item.id.toString(),
+//       name: item.title,
+//       description: item.description,
+//       category: item.category,
+//       sku: `SKU-${item.id}`,
+//       image: item.thumbnail || '', // Add the image from the API
+//       variants: item.variants ? item.variants : [],
+//     }))
+
+//     return products
+//   } catch (error) {
+//     console.error('Error fetching products:', error)
+//     return []
+//   }
+// }

@@ -1,10 +1,13 @@
 'use client'
 
 import { cn, useScroll } from '@/lib/utils'
-import { AddProductModal } from '../AddProductModal'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Button } from '../ui/button'
 import { Logo } from './Logo'
 
 const Navbar = () => {
+  const pathname = usePathname()
   const { isScrolling } = useScroll()
 
   return (
@@ -17,7 +20,13 @@ const Navbar = () => {
       <div className="mx-auto flex h-[70px] w-full items-center justify-between px-4 lg:px-8">
         <Logo />
 
-        <AddProductModal />
+        <Button asChild>
+          {pathname === '/' ? (
+            <Link href={'/products'}>All Products</Link>
+          ) : (
+            <Link href={'/'}>My Products</Link>
+          )}
+        </Button>
       </div>
     </nav>
   )
