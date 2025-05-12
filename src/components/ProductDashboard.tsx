@@ -10,22 +10,23 @@ import { getProducts } from '@/lib/utils'
 import { AddProductModal } from './AddProductModal'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
+import { PRODUCTS_KEY } from '@/constants'
 
 export function ProductDashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const { data: products = [], isLoading } = useQuery({
-    queryKey: ['products'],
+    queryKey: [PRODUCTS_KEY],
     queryFn: getProducts,
   })
 
   const filteredProducts = products.filter(
     (product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
-    <div className="mx-auto space-y-6 px-3 py-6 sm:px-6">
+    <div className="mx-auto space-y-6 py-6">
       <h1 className="text-2xl font-bold tracking-tight">New Products</h1>
 
       <div className="flex items-center gap-3">
@@ -51,7 +52,7 @@ export function ProductDashboard() {
           <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
         </div>
       ) : filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-6 xl:grid-cols-3">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

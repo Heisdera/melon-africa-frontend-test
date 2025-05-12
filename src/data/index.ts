@@ -1,5 +1,7 @@
-export const categories: { text: string; link: string }[] = [
-  { text: 'All', link: 'products' },
+import { ProductCategoryType } from '@/types'
+
+export const dummyCategories: ProductCategoryType[] = [
+  { text: 'All', link: 'all' },
   { text: 'Beauty', link: 'beauty' },
   { text: 'Fragrances', link: 'fragrances' },
   { text: 'Furniture', link: 'furniture' },

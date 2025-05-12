@@ -1,16 +1,16 @@
+import { TOKEN_MINUTE, TOKEN_REFRESH_THRESHOLD } from '@/constants'
 import {
   defaultShouldDehydrateQuery,
   isServer,
   QueryClient,
 } from '@tanstack/react-query'
-import { TOKEN_MINUTE } from '@/constants'
 
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
         gcTime: 2 * TOKEN_MINUTE,
-        staleTime: 0,
+        staleTime: TOKEN_REFRESH_THRESHOLD, // used 25mins instead of 0 or 1min since it's a dummy site and the data doesn't frequently get updated
         // refetchInterval: 2 * TOKEN_MINUTE,
         retry: 3,
         retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),

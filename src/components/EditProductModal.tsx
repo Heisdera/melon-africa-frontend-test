@@ -50,7 +50,7 @@ export function EditProductModal({
   const form = useForm<ProductFormSchemaTypes>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: product.name,
+      title: product.title,
       description: product.description,
       image: product.image,
     },
@@ -59,7 +59,7 @@ export function EditProductModal({
   // Update form values when product changes
   useEffect(() => {
     form.reset({
-      name: product.name,
+      title: product.title,
       description: product.description,
       image: product.image,
     })
@@ -69,7 +69,7 @@ export function EditProductModal({
     // Update the product with new data
     const updatedProduct = {
       ...product,
-      name: data.name,
+      title: data.title,
       description: data.description,
       image: data.image,
     }
@@ -135,7 +135,7 @@ export function EditProductModal({
 
             <FormField
               control={form.control}
-              name="name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>

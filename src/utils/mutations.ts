@@ -1,5 +1,6 @@
 'use client'
 
+import { PRODUCTS_KEY } from '@/constants'
 import {
   addProduct,
   addVariant,
@@ -18,7 +19,7 @@ export function useAddProductMutation() {
   return useMutation({
     mutationFn: addProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product added', {
         description: 'Your product has been added successfully.',
@@ -33,7 +34,7 @@ export function useEditProductMutation() {
   return useMutation({
     mutationFn: updateProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product updated', {
         description: 'Your product has been updated successfully.',
@@ -48,7 +49,7 @@ export function useDeleteProductMutation() {
   return useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product deleted', {
         description: 'Your product has been deleted successfully.',
@@ -64,7 +65,7 @@ export function useAddVariantMutation() {
   return useMutation({
     mutationFn: addVariant,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant added', {
         description: 'Your variant has been added successfully.',
@@ -79,7 +80,7 @@ export function useEditVariantMutation() {
   return useMutation({
     mutationFn: updateVariant,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant updated', {
         description: 'Your variant has been updated successfully.',
@@ -94,7 +95,7 @@ export function useDeleteVariantMutation() {
   return useMutation({
     mutationFn: deleteVariant,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant deleted', {
         description: 'Your variant has been deleted successfully.',

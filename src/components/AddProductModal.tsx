@@ -39,7 +39,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
   const form = useForm<ProductFormSchemmaTypes>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: '',
+      title: '',
       description: '',
       image: '',
     },
@@ -49,7 +49,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
     // Create a new product with a generated ID
     const newProduct = {
       id: generateId(),
-      name: data.name,
+      title: data.title,
       description: data.description,
       image: data.image,
       variants: [],
@@ -126,7 +126,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
 
             <FormField
               control={form.control}
-              name="name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>

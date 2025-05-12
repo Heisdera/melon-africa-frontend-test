@@ -56,7 +56,7 @@ export function VariantDialog({
     resolver: zodResolver(variantSchema),
     defaultValues: {
       id: variant?.id || '',
-      name: variant?.name || '',
+      title: variant?.name || '',
       sku: variant?.sku || '',
       size: variant?.size || '',
       color: variant?.color || '',
@@ -70,7 +70,7 @@ export function VariantDialog({
     if (open) {
       form.reset({
         id: variant?.id || '',
-        name: variant?.name || '',
+        title: variant?.name || '',
         sku: variant?.sku || '',
         size: variant?.size || '',
         color: variant?.color || '',
@@ -85,7 +85,7 @@ export function VariantDialog({
     const variantData: Variant = {
       id: values.id || generateId(),
       productId: variant?.productId || productId,
-      name: values.name,
+      name: values.title,
       sku: values.sku,
       size: values.size || '',
       color: values.color || '',
@@ -124,7 +124,7 @@ export function VariantDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>

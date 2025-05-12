@@ -10,7 +10,7 @@ const ACCEPTED_IMAGE_TYPES = [
 
 // add product schema
 export const productSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  title: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   description: z
     .string()
     .min(10, { message: 'Description must be at least 10 characters' })
@@ -35,7 +35,7 @@ export type ProductFormSchemmaTypes = z.infer<typeof productSchema>
 // Form schema
 export const variantSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  title: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   sku: z.string().min(3, { message: 'SKU must be at least 3 characters' }),
   size: z.string().optional(),
   color: z.string().optional(),

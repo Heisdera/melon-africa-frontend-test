@@ -4,13 +4,7 @@ import { Edit, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import type { Product, Variant } from '@/types'
 import { useDeleteProductMutation } from '@/utils/mutations'
 import Image from 'next/image'
@@ -52,34 +46,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <Card className="gap-3 overflow-hidden py-3">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-xl">{product.name}</CardTitle>
-
-            <div className="flex gap-1 transition-opacity">
-              <Button variant="ghost" size="icon" onClick={handleEditProduct}>
-                <Edit className="h-4 w-4" />
-                <span className="sr-only">Edit Product</span>
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <Trash2 className="h-4 w-4" />
-                <span className="sr-only">Delete Product</span>
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="-mt-3">
-          <div className="mb-3 aspect-video w-full overflow-hidden rounded-md">
+      <Card className="gap-3 overflow-hidden px-0 pt-0">
+        <CardContent className="px-0">
+          <div className="mb-3 aspect-video w-full overflow-hidden rounded-t-md bg-gray-200">
             {product.image ? (
               <Image
                 src={product.image}
-                alt={product.name}
+                alt={product.title}
                 className="h-full w-full object-cover transition-all hover:scale-105"
                 width={300}
                 height={200}
@@ -90,12 +63,34 @@ export function ProductCard({ product }: ProductCardProps) {
               </div>
             )}
           </div>
-          <p className="text-muted-foreground mb-3 line-clamp-2 text-sm">
-            {product.description}
-          </p>
+
+          <div className="px-3 md:px-4">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl">{product.title}</CardTitle>
+
+              <div className="flex gap-1 transition-opacity">
+                <Button variant="ghost" size="icon" onClick={handleEditProduct}>
+                  <Edit className="h-4 w-4" />
+                  <span className="sr-only">Edit Product</span>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span className="sr-only">Delete Product</span>
+                </Button>
+              </div>
+            </div>
+            <p className="text-muted-foreground mb-3 line-clamp-2 text-sm">
+              {product.description}
+            </p>
+          </div>
         </CardContent>
 
-        <CardFooter className="flex flex-col justify-between pt-0">
+        <CardFooter className="flex flex-col justify-between px-3 pt-0 md:px-4">
           {product.variants.length > 0 ? (
             <VariantList
               variants={product.variants}

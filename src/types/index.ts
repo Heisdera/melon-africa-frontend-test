@@ -1,6 +1,6 @@
 export interface Product {
   id: string
-  name: string
+  title: string
   image: string
   description: string
   variants: Variant[]
@@ -16,3 +16,5 @@ export interface Variant {
   price: number
   stock: number
 }
+
+export type ProductCategoryType = { text: string; link: string }

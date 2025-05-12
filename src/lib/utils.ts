@@ -185,27 +185,3 @@ export const deleteVariant = async (variantId: string): Promise<void> => {
 
   await saveProducts(updatedProducts)
 }
-
-// Optional: Fetch products from DummyJSON API
-// export const fetchProductsFromAPI = async (): Promise<Product[]> => {
-//   try {
-//     const response = await fetch('https://dummyjson.com/products?limit=10')
-//     const data = await response.json()
-
-//     // Transform the data to match our Product interface
-//     const products: Product[] = data.products.map((item: any) => ({
-//       id: item.id.toString(),
-//       name: item.title,
-//       description: item.description,
-//       category: item.category,
-//       sku: `SKU-${item.id}`,
-//       image: item.thumbnail || '', // Add the image from the API
-//       variants: item.variants ? item.variants : [],
-//     }))
-
-//     return products
-//   } catch (error) {
-//     console.error('Error fetching products:', error)
-//     return []
-//   }
-// }
