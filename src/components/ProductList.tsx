@@ -1,24 +1,67 @@
 'use client'
 
-import { Plus } from 'lucide-react'
+import { Loader2, Plus } from 'lucide-react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { useAddProductMutation } from '@/utils/mutations'
-import { useProducts } from '@/utils/queries'
+import { useCategories, useProducts } from '@/utils/queries'
+import { dummyCategories } from '@/data'
 
 export const ProductsList = () => {
   const searchParams = useSearchParams()
+  const { data: categoriesResponse } = useCategories()
   const currentCategory = searchParams.get('category') || 'all'
-  const { data } = useProducts(currentCategory)
+  const { data, isLoading, error } = useProducts(currentCategory)
   const { mutate: addProduct, isPending } = useAddProductMutation()
 
   const products = data?.data?.products || []
 
+  const categories = categoriesResponse?.data || dummyCategories
+
+  const activeCollectionIndex = categories?.findIndex(
+    (category) => category.link === currentCategory
+  )
+
+  const category =
+    activeCollectionIndex !== -1
+      ? categories[activeCollectionIndex].text
+      : currentCategory === 'all'
+        ? 'All'
+        : currentCategory
+
+  if (isLoading) {
+    return (
+      <div className="flex h-48 w-full items-center justify-center">
+        <Loader2 className="text-muted-foreground animate-spin" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-48 w-full items-center justify-center">
+        <p className="text-red-500">
+          Error loading products. Please try again later.
+        </p>
+      </div>
+    )
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex h-48 w-full items-center justify-center">
+        <p className="text-muted-foreground">
+          No products found for {category} category.
+        </p>
+      </div>
+    )
+  }
+
   return (
-    <div className="grid grid-cols-1 gap-4 px-1 md:grid-cols-2 lg:grid-cols-3">
+    <div className="mb-6 grid grid-cols-1 gap-4 px-1 sm:grid-cols-2 xl:grid-cols-3">
       {products.map((product) => (
         <Card key={product.id} className="gap-3 overflow-hidden px-0 pt-0">
           <CardContent className="px-0">

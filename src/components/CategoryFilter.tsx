@@ -15,7 +15,6 @@ export const CategoryFilter = () => {
   const { data: categoriesResponse, isLoading, error } = useCategories()
   const currentCategory = searchParams.get('category') || 'all'
   const { data } = useProducts(currentCategory)
-  console.log({ data })
   const categories = categoriesResponse?.data || dummyCategories
 
   const activeCollectionIndex = categories.findIndex(

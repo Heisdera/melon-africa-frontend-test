@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { generateId } from '@/lib/utils'
-import { ProductFormSchemmaTypes, productSchema } from '@/schemas'
+import { ProductFormSchemaTypes, productSchema } from '@/schemas'
 import { useImageUploadStore } from '@/store/image-upload-store'
 import { useAddProductMutation } from '@/utils/mutations'
 import { useState } from 'react'
@@ -36,7 +36,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const { mutate: addProduct, isPending } = useAddProductMutation()
 
-  const form = useForm<ProductFormSchemmaTypes>({
+  const form = useForm<ProductFormSchemaTypes>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       title: '',
@@ -45,7 +45,7 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
     },
   })
 
-  const onSubmit = async (data: ProductFormSchemmaTypes) => {
+  const onSubmit = async (data: ProductFormSchemaTypes) => {
     // Create a new product with a generated ID
     const newProduct = {
       id: generateId(),

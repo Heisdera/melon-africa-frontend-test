@@ -2,8 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -24,14 +24,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { productSchema } from '@/schemas'
-import type { z } from 'zod'
+import { ProductFormSchemaTypes, productSchema } from '@/schemas'
 import { useImageUploadStore } from '@/store/image-upload-store'
+import type { Product } from '@/types'
 import { useEditProductMutation } from '@/utils/mutations'
 import ImageUploader from './ImageUploader'
-import type { Product } from '@/types'
-
-type ProductFormSchemaTypes = z.infer<typeof productSchema>
 
 interface EditProductModalProps {
   product: Product

@@ -26,8 +26,8 @@ export function ProductDashboard() {
   )
 
   return (
-    <div className="mx-auto space-y-6 py-6">
-      <h1 className="text-2xl font-bold tracking-tight">New Products</h1>
+    <div className="mx-auto space-y-5 py-6">
+      <h1 className="text-2xl font-bold tracking-tight">Product Manager</h1>
 
       <div className="flex items-center gap-3">
         <div className="relative flex-1">

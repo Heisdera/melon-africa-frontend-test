@@ -13,8 +13,7 @@ export const productSchema = z.object({
   title: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   description: z
     .string()
-    .min(10, { message: 'Description must be at least 10 characters' })
-    .max(30, { message: 'Description must be at most 30 characters' }),
+    .min(10, { message: 'Description must be at least 10 characters' }),
   image: z.string().min(2, { message: 'Please upload an image' }),
 })
 
@@ -30,7 +29,7 @@ export const imageSchema = z.object({
     }),
 })
 
-export type ProductFormSchemmaTypes = z.infer<typeof productSchema>
+export type ProductFormSchemaTypes = z.infer<typeof productSchema>
 
 // Form schema
 export const variantSchema = z.object({
