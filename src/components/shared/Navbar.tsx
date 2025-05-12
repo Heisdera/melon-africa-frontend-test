@@ -1,6 +1,7 @@
 'use client'
 
 import { cn, useScroll } from '@/lib/utils'
+import { AddProductModal } from '../AddProductModal'
 import { Logo } from './Logo'
 
 const Navbar = () => {
@@ -15,6 +16,8 @@ const Navbar = () => {
     >
       <div className="mx-auto flex h-[70px] w-full items-center justify-between px-4 lg:px-8">
         <Logo />
+
+        <AddProductModal />
       </div>
     </nav>
   )
