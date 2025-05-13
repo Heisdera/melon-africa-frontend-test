@@ -24,6 +24,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { generateId } from '@/lib/utils'
 import { VariantFormSchemaType, variantSchema } from '@/schemas'
 import type { Variant } from '@/types'
@@ -39,7 +46,7 @@ interface VariantDialogProps {
   productId: string
 }
 
-export function VariantDialog({
+export function VariantModal({
   open,
   onOpenChange,
   variant,
@@ -141,7 +148,7 @@ export function VariantDialog({
                 control={form.control}
                 name="sku"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-fit">
                     <FormLabel>SKU</FormLabel>
                     <FormControl>
                       <Input placeholder="SHIRT-BLACK-XL" {...field} />
@@ -155,7 +162,7 @@ export function VariantDialog({
                 control={form.control}
                 name="price"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-fit">
                     <FormLabel>Price</FormLabel>
                     <FormControl>
                       <Input
@@ -177,11 +184,26 @@ export function VariantDialog({
                 control={form.control}
                 name="size"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-fit">
                     <FormLabel>Size</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Size (optional)" {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || undefined}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a size" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="XS">XS</SelectItem>
+                        <SelectItem value="S">S</SelectItem>
+                        <SelectItem value="M">M</SelectItem>
+                        <SelectItem value="L">L</SelectItem>
+                        <SelectItem value="XL">XL</SelectItem>
+                        <SelectItem value="XXL">XXL</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -191,11 +213,26 @@ export function VariantDialog({
                 control={form.control}
                 name="color"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-fit">
                     <FormLabel>Color</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Color (optional)" {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || undefined}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a color" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Red">Red</SelectItem>
+                        <SelectItem value="Blue">Blue</SelectItem>
+                        <SelectItem value="Black">Black</SelectItem>
+                        <SelectItem value="White">White</SelectItem>
+                        <SelectItem value="Green">Green</SelectItem>
+                        <SelectItem value="Yellow">Yellow</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

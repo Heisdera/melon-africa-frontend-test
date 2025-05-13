@@ -22,7 +22,7 @@ export function useAddProductMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product added', {
-        description: 'Your product has been added successfully.',
+        description: 'Product has been added successfully.',
       })
     },
   })
@@ -37,7 +37,7 @@ export function useEditProductMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product updated', {
-        description: 'Your product has been updated successfully.',
+        description: 'Product has been updated successfully.',
       })
     },
   })
@@ -52,7 +52,7 @@ export function useDeleteProductMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Product deleted', {
-        description: 'Your product has been deleted successfully.',
+        description: 'Product has been deleted successfully.',
       })
     },
   })
@@ -68,7 +68,7 @@ export function useAddVariantMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant added', {
-        description: 'Your variant has been added successfully.',
+        description: 'Variant has been added successfully.',
       })
     },
   })
@@ -83,7 +83,7 @@ export function useEditVariantMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant updated', {
-        description: 'Your variant has been updated successfully.',
+        description: 'Variant has been updated successfully.',
       })
     },
   })
@@ -98,7 +98,7 @@ export function useDeleteVariantMutation() {
       queryClient.invalidateQueries({ queryKey: [PRODUCTS_KEY] })
 
       toast.success('Variant deleted', {
-        description: 'Your variant has been deleted successfully.',
+        description: 'Variant has been deleted successfully.',
       })
     },
   })

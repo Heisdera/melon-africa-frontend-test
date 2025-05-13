@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { ConfirmDialog } from './ConfirmModal'
 import { EditProductModal } from './EditProductModal'
 import { VariantList } from './VariantList'
-import { VariantDialog } from './VariantModal'
+import { VariantModal } from './VariantModal'
 
 interface ProductCardProps {
   product: Product
@@ -142,7 +142,7 @@ export function ProductCard({ product }: ProductCardProps) {
         onOpenChange={setIsEditProductDialogOpen}
       />
 
-      <VariantDialog
+      <VariantModal
         open={isVariantDialogOpen}
         onOpenChange={setIsVariantDialogOpen}
         variant={editingVariant}
