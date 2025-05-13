@@ -2,6 +2,7 @@ export interface Product {
   id: string
   title: string
   image: string
+  imagePublicId?: string
   description: string
   variants: Variant[]
 }

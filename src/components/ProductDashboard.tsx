@@ -53,8 +53,8 @@ export function ProductDashboard() {
         </div>
       ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-6 xl:grid-cols-3">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {filteredProducts.map((product, i) => (
+            <ProductCard key={`product_${i}_${product.id}`} product={product} />
           ))}
         </div>
       ) : (

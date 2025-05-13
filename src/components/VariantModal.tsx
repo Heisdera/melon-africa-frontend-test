@@ -115,6 +115,11 @@ export function VariantModal({
     }
   }
 
+  // Check if form has any changes
+  const isDirty = form.formState.isDirty
+  // For new variants, we don't need the dirty check
+  const isDisabled = isLoading || (!!variant && !isDirty)
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -268,7 +273,7 @@ export function VariantModal({
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isDisabled}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {variant ? 'Update' : 'Create'}
               </Button>

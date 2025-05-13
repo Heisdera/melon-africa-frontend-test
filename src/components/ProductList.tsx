@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card'
 import { useAddProductMutation } from '@/utils/mutations'
 import { useCategories, useProducts } from '@/utils/queries'
 import { dummyCategories } from '@/data'
+import { generateId } from '@/lib/utils'
 
 export const ProductsList = () => {
   const searchParams = useSearchParams()
@@ -95,7 +96,7 @@ export const ProductsList = () => {
             <Button
               onClick={() =>
                 addProduct({
-                  id: product.id,
+                  id: generateId(),
                   title: product.title,
                   image: product.image,
                   description: product.description,

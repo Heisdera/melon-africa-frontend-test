@@ -24,7 +24,7 @@ const Navbar = () => {
           {pathname === '/' ? (
             <Link href={'/products'}>All Products</Link>
           ) : (
-            <Link href={'/'}>View My Products</Link>
+            <Link href={'/'}>Manage My Products</Link>
           )}
         </Button>
       </div>

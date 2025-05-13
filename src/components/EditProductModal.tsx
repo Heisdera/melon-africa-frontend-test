@@ -29,6 +29,13 @@ import { useImageUploadStore } from '@/store/image-upload-store'
 import type { Product } from '@/types'
 import { useEditProductMutation } from '@/utils/mutations'
 import ImageUploader from './ImageUploader'
+import { convertBase64StringToFile } from '@/lib/utils'
+
+// Helper function to check if a string is a base64 image
+const isBase64Image = (str: string): boolean => {
+  // Check if string starts with data:image format
+  return str?.startsWith('data:image/') || false
+}
 
 interface EditProductModalProps {
   product: Product
@@ -41,7 +48,7 @@ export function EditProductModal({
   open,
   onOpenChange,
 }: EditProductModalProps) {
-  const { setImage } = useImageUploadStore()
+  const { setImage, fileName } = useImageUploadStore()
   const { mutate: editProduct, isPending } = useEditProductMutation()
 
   const form = useForm<ProductFormSchemaTypes>({
@@ -63,12 +70,64 @@ export function EditProductModal({
   }, [product, form])
 
   const onSubmit = async (data: ProductFormSchemaTypes) => {
+    let imageUrl = data.image
+    let imagePublicId = product.imagePublicId
+
+    // Only process image upload if it's a base64 string (new image)
+    if (isBase64Image(data.image)) {
+      try {
+        // If replacing an existing image, delete the old one first
+        if (product.imagePublicId) {
+          try {
+            await fetch('/api/image/delete', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ public_id: product.imagePublicId }),
+            })
+          } catch (deleteError) {
+            console.error('Error deleting old image:', deleteError)
+            // Continue with upload even if deletion fails
+          }
+        }
+
+        const file = convertBase64StringToFile(data.image, fileName)
+
+        if (!file) {
+          throw new Error('Failed to convert base64 to file')
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const response = await fetch('/api/image/upload', {
+          method: 'POST',
+          body: formData,
+        })
+
+        const result: { secure_url: string; public_id: string } =
+          await response.json()
+        if (!result) {
+          throw new Error('Failed to upload file')
+        }
+
+        // Use the newly uploaded image URL and public_id
+        imageUrl = result.secure_url
+        imagePublicId = result.public_id
+      } catch (error) {
+        console.error('Image upload error:', error)
+        // Continue with the original image if upload fails
+      }
+    }
+
     // Update the product with new data
     const updatedProduct = {
       ...product,
       title: data.title,
       description: data.description,
-      image: data.image,
+      image: imageUrl,
+      imagePublicId: imagePublicId,
     }
 
     // Update product in local storage via mutation
@@ -90,6 +149,10 @@ export function EditProductModal({
   }
 
   const isSubmitting = form.formState.isSubmitting || isPending
+
+  // Check if form has any changes
+  const isDirty = form.formState.isDirty
+  const isDisabled = isSubmitting || !isDirty
 
   return (
     <Dialog
@@ -176,7 +239,7 @@ export function EditProductModal({
                 Cancel
               </Button>
 
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isDisabled}>
                 {isSubmitting && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}

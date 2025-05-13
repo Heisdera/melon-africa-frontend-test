@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { generateId } from '@/lib/utils'
+import { convertBase64StringToFile, generateId } from '@/lib/utils'
 import { ProductFormSchemaTypes, productSchema } from '@/schemas'
 import { useImageUploadStore } from '@/store/image-upload-store'
 import { useAddProductMutation } from '@/utils/mutations'
@@ -32,7 +32,7 @@ import { useState } from 'react'
 import ImageUploader from './ImageUploader'
 
 export function AddProductModal({ children }: { children?: React.ReactNode }) {
-  const { setImage } = useImageUploadStore()
+  const { setImage, fileName } = useImageUploadStore()
   const [open, setOpen] = useState(false)
   const { mutate: addProduct, isPending } = useAddProductMutation()
 
@@ -46,22 +46,49 @@ export function AddProductModal({ children }: { children?: React.ReactNode }) {
   })
 
   const onSubmit = async (data: ProductFormSchemaTypes) => {
-    // Create a new product with a generated ID
-    const newProduct = {
-      id: generateId(),
-      title: data.title,
-      description: data.description,
-      image: data.image,
-      variants: [],
-    }
+    console.log(data)
 
-    // Add product to local storage via mutation
-    addProduct(newProduct, {
-      onSuccess: () => {
-        setOpen(false)
-        form.reset()
-      },
-    })
+    const file = convertBase64StringToFile(data.image, fileName)
+
+    try {
+      if (!file) {
+        throw new Error('No file selected')
+      }
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/image/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const result: { secure_url: string; public_id: string } =
+        await response.json()
+      if (!result) {
+        throw new Error('Failed to upload file')
+      }
+
+      // Create a new product with a generated ID
+      const newProduct = {
+        id: generateId(),
+        title: data.title,
+        description: data.description,
+        image: result.secure_url,
+        imagePublicId: result.public_id,
+        variants: [],
+      }
+
+      // Add product to local storage via mutation
+      addProduct(newProduct, {
+        onSuccess: () => {
+          setOpen(false)
+          form.reset()
+        },
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleClose = (open: boolean) => {

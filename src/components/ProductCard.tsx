@@ -35,9 +35,28 @@ export function ProductCard({ product }: ProductCardProps) {
     setIsVariantDialogOpen(true)
   }
 
-  const handleDeleteProduct = () => {
-    deleteProduct(product.id)
-    setIsDeleteDialogOpen(false)
+  const handleDeleteProduct = async () => {
+    try {
+      // Delete the image from Cloudinary if it exists
+      if (product.imagePublicId) {
+        await fetch('/api/image/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ public_id: product.imagePublicId }),
+        })
+      }
+
+      // Then delete the product from local storage
+      deleteProduct(product.id)
+      setIsDeleteDialogOpen(false)
+    } catch (error) {
+      console.error('Error deleting product image:', error)
+      // Still delete the product even if image deletion fails
+      deleteProduct(product.id)
+      setIsDeleteDialogOpen(false)
+    }
   }
 
   const handleEditProduct = () => {
